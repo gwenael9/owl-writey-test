@@ -5,9 +5,9 @@ export function getId(url: string) {
   return url.replace('/api/exercises', '');
 }
 
-export async function getExerciceByID(token: string, createdExerciseId?: string){
+export async function getExerciceByID(token: string, id: string){
   return await request(baseUrl)
-    .get(`/exercises/${createdExerciseId}`)
+    .get(`/exercises/${id}`)
     .set("Authorization", `Bearer ${token}`);
 }
 

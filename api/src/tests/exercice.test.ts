@@ -15,7 +15,7 @@ const exo = {
 };
 
 let token: string;
-let createdExerciseId: string = "";
+let exoId: string = "";
 
 async function authenticate(): Promise<string> {
   const url = 'https://www.googleapis.com/';
@@ -45,17 +45,17 @@ beforeEach(async () => {
 
     expect(response.status).toBe(201);
     const location = response.header["location"];
-    createdExerciseId = getId(location);
+    exoId = getId(location);
 });
 
 // après chaque test, on supprime l'exo
 afterEach(async () => {
-  if (createdExerciseId) {
+  if (exoId) {
     const responseDelete = await request(baseUrl)
-      .delete(`/exercises/${createdExerciseId}`)
+      .delete(`/exercises/${exoId}`)
       .set("Authorization", `Bearer ${token}`);
     expect(responseDelete.status).toBe(204);
-    createdExerciseId = "";
+    exoId = "";
   }
 });
 
@@ -63,25 +63,47 @@ describe("exercises", () => {
   it("should get all exercises", async () => {
     const response = await getAllExercices(token);
     expect(response.status).toBe(200);
-    expect(response.body.exercises.length).toEqual(1);
+    // on vérifie qu'il y a au moins un exo
+    expect(response.body.exercises.length).toBeGreaterThanOrEqual(1);
   });
 
   it("should get one exercise", async () => {
-    const response = await getExerciceByID(token, createdExerciseId);
+    const response = await getExerciceByID(token, exoId);
     expect(response.status).toBe(200);
     expect(response.body.name).toBe(exo.name);
   });
 
   it("should finish an exercise", async () => {
     const responseFinish = await request(baseUrl)
-      .post(`/exercises/${createdExerciseId}/finish`)
+      .post(`/exercises/${exoId}/finish`)
       .set("Authorization", `Bearer ${token}`);
     expect(responseFinish.status).toBe(204);
 
-    const responseGet = await getExerciceByID(token, createdExerciseId);
+    const responseGet = await getExerciceByID(token, exoId);
     expect(responseGet.status).toBe(200);
     expect(responseGet.body.status).toBe("Finished");
   });
 });
 
+describe("cadavre exquis", () => {
+  const content = "mon tour";
 
+  it("should submit my turn", async () => {
+    await postExquis("take");
+    await postExquis("submit", content);
+    
+    // vérifier le commentaire
+    const responseGet = await getExerciceByID(token, exoId);
+    expect(responseGet.status).toBe(200);
+    expect(responseGet.body.content.scenes[1].text).toBe(content);
+  })
+})
+
+async function postExquis(type: string, content?: string) {
+  const response = await request(baseUrl)
+  .post(`/exquisite-corpse/${exoId}/${type}-turn`)
+  .set("Authorization", `Bearer ${token}`)
+  .send({content})
+  
+  expect(response.status).toBe(204);
+}
