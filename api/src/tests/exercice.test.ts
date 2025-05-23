@@ -20,7 +20,7 @@ let createdExerciseId: string = "";
 async function authenticate(): Promise<string> {
   const url = 'https://www.googleapis.com/';
   const response = await request(url)
-    .post("/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyDpdYdgvEwYIKGr_rmh37DipL3djZ-KF3k")
+    .post(`/identitytoolkit/v3/relyingparty/verifyPassword?key=${process.env.API_KEY}`)
     .send({
       email: process.env.EMAIL,
       password: process.env.PASSWORD,
