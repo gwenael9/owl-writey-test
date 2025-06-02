@@ -47,7 +47,7 @@ test.describe("Login page", () => {
   });
 
   test("should display error if wrong logins are entered", async () => {
-    await loginPo.logAs("wrongLogin", "wrongPassword");
+    await loginPo.logAsBadUser("wrongLogin", "wrongPassword");
     await loginPo.shouldDisplayText("Le format de l'email est incorrect");
   });
 

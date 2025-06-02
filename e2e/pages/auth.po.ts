@@ -33,6 +33,11 @@ export class LoginPo extends BasePo {
     await expect(this.pageLocator).toBeVisible();
   }
 
+  async fillForm(login: string, password: string): Promise<void> {
+    await this.loginInput.fill(login);
+    await this.passwordInput.fill(password);
+  }
+
   async shouldDisplayHeaderAndForm(): Promise<void> {
     expect(await this.page.locator("h2").innerText()).toContain("Connexion");
     await expect(this.loginInput).toBeVisible();
@@ -41,8 +46,7 @@ export class LoginPo extends BasePo {
   }
 
   async logAs(login: string, password: string): Promise<void> {
-    await this.loginInput.fill(login);
-    await this.passwordInput.fill(password);
+    await this.fillForm(login, password);
     await this.submitButton.click();
   }
 
@@ -51,6 +55,11 @@ export class LoginPo extends BasePo {
   ): Promise<void> {
     const userInfo = this.auth.getUser(user);
     await this.logAs(userInfo.login, userInfo.password);
+  }
+
+  async logAsBadUser(login: string, password: string): Promise<void> {
+    await this.fillForm(login, password);
+    await expect(this.submitButton).toBeDisabled();
   }
 }
 
