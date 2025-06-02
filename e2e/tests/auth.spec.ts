@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
 import { LoginPo, RegisterPo } from "../pages/auth.po";
 import { DashboardPo } from "../pages/dashboard.po";
 import { E2EUser, userName } from "../tools/Auth";
@@ -50,28 +50,17 @@ test.describe("Register page", () => {
     await registerPo.shouldDisplayHeaderAndForm();
   });
 
-  test("should redirect to the dashboard page on successful register", async ({
-    page,
-  }) => {
-    const responsePromise = page.waitForResponse((response) =>
-      response
-        .url()
-        .includes("identitytoolkit.googleapis.com/v1/accounts:signUp")
-    );
-
-    // Effectuer l'inscription
+  test("should redirect to the dashboard page on successful register", async () => {
     await registerPo.registerAs(user);
 
-    // Attendre et vérifier la réponse
-    const response = await responsePromise;
-    const { localId, idToken } = await response.json();
-
-    user.localId = localId;
-    user.idToken = idToken;
+    // on récupère l'id de l'user et le token
+    const data = await registerPo.getTokenAndUserId();
+    user.localId = data.localId;
+    user.idToken = data.idToken;
 
     await dashboardPo.shouldBeDisplayed();
 
-    // on supprime l'user après l'avoir créé
+    // on supprime l'user
     await registerPo.deleteUser(user);
   });
 });

@@ -135,6 +135,17 @@ export class RegisterPo extends AuthPagePo {
     await this.submitButton.click();
   }
 
+  async getTokenAndUserId(): Promise<{ idToken: string; localId: string }> {
+    const response = await this.page.waitForResponse((response) =>
+      response
+        .url()
+        .includes("identitytoolkit.googleapis.com/v1/accounts:signUp")
+    );
+
+    const { localId, idToken } = await response.json();
+    return { localId, idToken };
+  }
+
   async deleteUser(user: E2EUser): Promise<void> {
     if (!user.localId || !user.idToken) {
       throw new Error(
