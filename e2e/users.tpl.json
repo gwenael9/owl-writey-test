@@ -1,7 +1,8 @@
 {
     "@usage" : "Fill in this file with the users and the associated passwords",
     "toto": {
-      "login": "<todo>",
+      "email": "<todo>",
+      "name": "<todo>",
       "password": "<todo>"
     }
   }

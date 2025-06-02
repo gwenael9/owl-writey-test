@@ -6,8 +6,11 @@ import * as path from "path";
  */
 
 export interface E2EUser {
-  login: string;
+  email: string;
+  name: string;
   password: string;
+  localId?: string;
+  idToken?: string;
 }
 
 export const userName = {
