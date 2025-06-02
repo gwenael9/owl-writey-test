@@ -27,4 +27,15 @@ test("create and add tour", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "À vous de jouer !", level: 2 })
   ).toBeVisible();
+
+  const textArea = page.locator('p[data-placeholder="Type here..."]');
+  await expect(textArea).toBeVisible();
+  await textArea.fill("Mon texte de test");
+
+  const submitButton = page.getByRole("button", { name: "Soumettre" });
+  await expect(submitButton).toBeVisible();
+  await submitButton.click();
+
+  // Vérifier que le contenu de l'exercice est visible
+  await expect(page.getByText("Mon texte de test")).toBeVisible();
 });

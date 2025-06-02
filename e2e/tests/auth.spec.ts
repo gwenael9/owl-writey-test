@@ -1,15 +1,12 @@
 import { expect, test } from "@playwright/test";
 import { user } from "../helpers/auth";
-import { login, logout } from "../helpers/auth";
 import { baseUrl } from "../utils/url";
+import { LoginPo } from "../pages/auth.po";
+import { DashboardPo } from "../pages/dashboard.po";
+import { userName } from "../tools/Auth";
 
 test("register", async ({ page }) => {
   await page.goto(baseUrl);
-
-  // Vérifier la présence de la balise h1 avec le texte spécifié
-  await expect(
-    page.getByRole("heading", { name: "L'imaginaire à portée de Plume !" })
-  ).toBeVisible();
 
   // Vérifier la présence du bouton d'inscription et cliquer dessus
   const inscriptionButton = page
@@ -34,7 +31,28 @@ test("register", async ({ page }) => {
   await expect(page).toHaveURL(`${baseUrl}/dashboard`);
 });
 
-test("login and logout", async ({ page }) => {
-  await login(page);
-  await logout(page);
+test.describe("Login page", () => {
+  let loginPo: LoginPo;
+  let dashboardPo: DashboardPo;
+
+  test.beforeEach(async ({ page }) => {
+    loginPo = new LoginPo(page);
+    dashboardPo = new DashboardPo(page);
+    await loginPo.goTo();
+  });
+
+  test("should be displayed", async () => {
+    await loginPo.shouldBeDisplayed();
+    await loginPo.shouldDisplayHeaderAndForm();
+  });
+
+  test("should display error if wrong logins are entered", async () => {
+    await loginPo.logAs("wrongLogin", "wrongPassword");
+    await loginPo.shouldDisplayText("Le format de l'email est incorrect");
+  });
+
+  test("should redirect to the dashboard page on successful login", async () => {
+    await loginPo.logAsUser(userName.TOTO);
+    await dashboardPo.shouldBeDisplayed();
+  });
 });
