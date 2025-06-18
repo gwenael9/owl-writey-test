@@ -1,5 +1,5 @@
-import { defineBddConfig } from "playwright-bdd";
 import { defineConfig, devices } from "@playwright/test";
+import { defineBddConfig } from "playwright-bdd";
 
 /**
  * Read environment variables from file.
@@ -8,8 +8,8 @@ import { defineConfig, devices } from "@playwright/test";
 // import dotenv from 'dotenv';
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
+const useBdd = true; // process.env['PLAYWRIGHT_USE_BDD'] === '1';
 
-const useBdd = process.env["PLAYWRIGHT_USE_BDD"] === "1";
 const specs = useBdd
   ? defineBddConfig({
       features: ["features/**/*.feature"],
@@ -35,7 +35,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://localhost:3000',
+    baseURL: "https://playwright.dev",
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
@@ -52,11 +52,11 @@ export default defineConfig({
       name: "firefox",
       use: { ...devices["Desktop Firefox"] },
     },
-
+    /*
     {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
-    },
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },*/
 
     /* Test against mobile viewports. */
     // {

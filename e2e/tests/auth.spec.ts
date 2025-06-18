@@ -43,8 +43,10 @@ test.describe("Register page", () => {
     registerPo = new RegisterPo(page);
     dashboardPo = new DashboardPo(page);
 
-    // on supprime l'user
-    await registerPo.deleteUser(user);
+    if (user.localId) {
+      // on supprime l'user
+      await registerPo.deleteUser(user);
+    }
 
     await registerPo.goTo();
   });
@@ -56,12 +58,11 @@ test.describe("Register page", () => {
 
   test("should redirect to the dashboard page on successful register", async () => {
     await registerPo.registerAs(user);
+    await dashboardPo.shouldBeDisplayed();
 
     // on récupère l'id de l'user et le token
     const data = await registerPo.getTokenAndUserId();
     user.localId = data.localId;
     user.idToken = data.idToken;
-
-    await dashboardPo.shouldBeDisplayed();
   });
 });
