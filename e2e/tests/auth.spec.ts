@@ -42,6 +42,10 @@ test.describe("Register page", () => {
   test.beforeEach(async ({ page }) => {
     registerPo = new RegisterPo(page);
     dashboardPo = new DashboardPo(page);
+
+    // on supprime l'user
+    await registerPo.deleteUser(user);
+
     await registerPo.goTo();
   });
 
@@ -59,8 +63,5 @@ test.describe("Register page", () => {
     user.idToken = data.idToken;
 
     await dashboardPo.shouldBeDisplayed();
-
-    // on supprime l'user
-    await registerPo.deleteUser(user);
   });
 });

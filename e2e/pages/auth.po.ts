@@ -148,9 +148,7 @@ export class RegisterPo extends AuthPagePo {
 
   async deleteUser(user: E2EUser): Promise<void> {
     if (!user.localId || !user.idToken) {
-      throw new Error(
-        "localId et idToken sont requis pour supprimer l'utilisateur"
-      );
+      return;
     }
 
     const context = await request.newContext();
