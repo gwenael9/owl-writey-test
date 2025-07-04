@@ -136,7 +136,6 @@ export class RegisterPo extends AuthPagePo {
   }
 
   async getTokenAndUserId(): Promise<{ idToken: string; localId: string }> {
-    console.log("getToken");
     const response = await this.page.waitForResponse((response) =>
       response
         .url()
@@ -149,7 +148,6 @@ export class RegisterPo extends AuthPagePo {
   }
 
   async deleteUser(user: E2EUser): Promise<void> {
-    console.log("user", user);
     if (!user.localId || !user.idToken) {
       return;
     }
