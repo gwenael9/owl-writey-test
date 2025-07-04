@@ -46,13 +46,16 @@ export class ExercisePo extends BasePo {
       .filter({ has: this.page.locator("mat-icon", { hasText: "delete" }) });
   }
 
-  async shouldBeDisplayed(): Promise<void> {
-    await expect(this.pageLocator).toBeVisible();
+  get paragraphInput(): Locator {
+    return this.page.getByRole("paragraph").filter({ hasText: /^$/ });
   }
 
-  async goTo(): Promise<void> {
-    await this.addExerciseButton.click();
-    await this.shouldBeDisplayed();
+  get submitTurnButton(): Locator {
+    return this.page.getByRole("button", { name: "Soumettre" });
+  }
+
+  async shouldBeDisplayed(): Promise<void> {
+    await expect(this.pageLocator).toBeVisible();
   }
 
   async createExercise(exercise: Exercise): Promise<void> {
@@ -63,6 +66,8 @@ export class ExercisePo extends BasePo {
     await this.titleInput.fill(exercise.title);
     await this.historyInput.fill(exercise.history);
     await this.submitButton.click();
+
+    await expect(this.page.getByText(exercise.title).first()).toBeVisible();
   }
 
   async deleteExercise(): Promise<void> {
@@ -75,5 +80,23 @@ export class ExercisePo extends BasePo {
   async clickOnCard(exerciceName: string): Promise<void> {
     await this.shouldDisplayText(exerciceName);
     await this.page.getByText(exerciceName).click();
+  }
+
+  async takeTurn(content: string, exerciceName: string): Promise<void> {
+    await this.turnButton.isVisible();
+    await this.turnButton.click();
+
+    await this.shouldDisplayText(
+      `Vous avez pris un tour sur l'exercice "${exerciceName}".`
+    );
+
+    await this.paragraphInput.isVisible();
+    await this.paragraphInput.fill(content);
+
+    await this.submitTurnButton.isVisible();
+    await this.submitTurnButton.click();
+
+    await this.wait(2000);
+    await this.shouldDisplayText(content);
   }
 }

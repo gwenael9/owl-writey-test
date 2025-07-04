@@ -33,9 +33,12 @@ test.describe("Exercise", () => {
     await exercisePo.deleteExercise();
   });
 
-  test("create a new exercise", async ({ page }) => {
+  test("create a new exercise", async () => {
     await exercisePo.createExercise(exercise);
-    await expect(page.getByText(exercise.title).first()).toBeVisible();
-    await expect(exercisePo.turnButton).toBeVisible();
+  });
+
+  test("add my turn", async () => {
+    await exercisePo.createExercise(exercise);
+    await exercisePo.takeTurn("mon nouveau commentaire", exercise.title);
   });
 });

@@ -1,6 +1,11 @@
 import request from "supertest";
 import { baseUrl } from "../url";
-import { getId, getExerciceByID, getAllExercices } from "../utils/exercice";
+import {
+  getId,
+  getExerciceByID,
+  getAllExercices,
+  postExquis,
+} from "../utils/exercice";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -18,9 +23,11 @@ let token: string;
 let exoId: string = "";
 
 async function authenticate(): Promise<string> {
-  const url = 'https://www.googleapis.com/';
+  const url = "https://www.googleapis.com/";
   const response = await request(url)
-    .post(`/identitytoolkit/v3/relyingparty/verifyPassword?key=${process.env.API_KEY}`)
+    .post(
+      `/identitytoolkit/v3/relyingparty/verifyPassword?key=${process.env.API_KEY}`
+    )
     .send({
       email: process.env.EMAIL,
       password: process.env.PASSWORD,
@@ -43,9 +50,9 @@ beforeEach(async () => {
     .set("Authorization", `Bearer ${token}`)
     .send(exo);
 
-    expect(response.status).toBe(201);
-    const location = response.header["location"];
-    exoId = getId(location);
+  expect(response.status).toBe(201);
+  const location = response.header["location"];
+  exoId = getId(location);
 });
 
 // après chaque test, on supprime l'exo
@@ -89,21 +96,12 @@ describe("cadavre exquis", () => {
   const content = "mon tour";
 
   it("should submit my turn", async () => {
-    await postExquis("take");
-    await postExquis("submit", content);
-    
+    await postExquis(exoId, token, "take");
+    await postExquis(exoId, token, "submit", content);
+
     // vérifier le commentaire
     const responseGet = await getExerciceByID(token, exoId);
     expect(responseGet.status).toBe(200);
     expect(responseGet.body.content.scenes[1].text).toBe(content);
-  })
-})
-
-async function postExquis(type: string, content?: string) {
-  const response = await request(baseUrl)
-  .post(`/exquisite-corpse/${exoId}/${type}-turn`)
-  .set("Authorization", `Bearer ${token}`)
-  .send({content})
-  
-  expect(response.status).toBe(204);
-}
+  });
+});
