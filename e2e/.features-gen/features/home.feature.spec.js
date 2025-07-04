@@ -1,21 +1,16 @@
 // Generated from: features\home.feature
-import { test } from "playwright-bdd";
+import { fixtures as test } from "../../steps/common.steps.ts";
 
 test.describe('Home page', () => {
 
-  test('Display home page', async ({ When, Then }) => { 
-    await When('I go to "home" page'); 
-    await Then('I should see the home page displayed'); 
+  test('Display home page', async ({ When, page, Then }) => { 
+    await When('I go to "home" page', null, { page }); 
+    await Then('I should see the home page displayed', null, { page }); 
   });
 
 });
 
 // == technical section ==
-
-test.beforeAll('BeforeAll Hooks', ({ $runBeforeAllHooks }) => $runBeforeAllHooks(test, {  }, bddFileData));
-test.afterAll('AfterAll Hooks', ({ $registerAfterAllHooks }) => $registerAfterAllHooks(test, {  }, bddFileData));
-test.beforeEach('BeforeEach Hooks', ({ $beforeEach }) => {});
-test.afterEach('AfterEach Hooks', ({ $afterEach }) => {});
 
 test.use({
   $test: ({}, use) => use(test),

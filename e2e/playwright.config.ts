@@ -10,8 +10,6 @@ import path from "path";
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 const useBdd = process.env["PLAYWRIGHT_USE_BDD"] === "1";
 
-console.log("useBdd", useBdd);
-
 const specs = useBdd
   ? defineBddConfig({
       features: ["features/**/*.feature"],
@@ -41,7 +39,14 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
+
+    /* Timeout settings */
+    actionTimeout: 60000,
+    navigationTimeout: 60000,
   },
+
+  /* Global timeout for tests */
+  timeout: 120000,
 
   /* Configure projects for major browsers */
   projects: [

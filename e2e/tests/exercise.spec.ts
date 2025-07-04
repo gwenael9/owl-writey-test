@@ -1,27 +1,29 @@
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
 import { LoginPo } from "../pages/auth.po";
 import { userName } from "../tools/Auth";
 import { DashboardPo } from "../pages/dashboard.po";
-import { ExercicePo } from "../pages/exercice.po";
+import { ExercisePo } from "../pages/exercise.po";
 
 const exercise = {
-  title: "Exercice de test",
+  title: "Exercise de test",
   content: "Contenu",
 };
 
-test.describe("Exercice", () => {
+test.describe("Exercise", () => {
   let loginPo: LoginPo;
   let dashboardPo: DashboardPo;
-  let exercicePo: ExercicePo;
+  let exercisePo: ExercisePo;
 
   test.beforeEach(async ({ page }) => {
     loginPo = new LoginPo(page);
     dashboardPo = new DashboardPo(page);
-    exercicePo = new ExercicePo(page);
+    exercisePo = new ExercisePo(page);
 
     await loginPo.goTo();
     await loginPo.logAsUser(userName.TOTO);
     await dashboardPo.shouldBeDisplayed();
+    await exercisePo.addExerciseButton.click();
+    await exercisePo.shouldDisplayText("Nouvel exercice");
   });
 
   test("create a new exercise", async ({ page }) => {});
@@ -48,7 +50,7 @@ test.describe("Exercice", () => {
   //   await expect(submitButton).toBeVisible();
   //   await submitButton.click();
 
-  //   // Vérifier que le contenu de l'exercice est visible
+  //   // Vérifier que le contenu de l'exercise est visible
   //   await expect(page.getByText("Mon texte de test")).toBeVisible();
   });
 });

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "bdd:run": "PLAYWRIGHT_USE_BDD=1 bddgen && playwright test --ui",
+    "bdd:run": "bddgen && playwright test --ui",
     "e2e:open": "playwright test --ui"
   },
   "keywords": [],
