@@ -26,7 +26,7 @@ test.describe("Exercice", () => {
 
   test("create a new exercise", async ({ page }) => {});
 
-  // test("create and add tour", async ({ page }) => {
+  test("create and add tour", async ({ page }) => {
   //   await login(page);
   //   await createExercise(page, exercise);
 
@@ -50,5 +50,5 @@ test.describe("Exercice", () => {
 
   //   // Vérifier que le contenu de l'exercice est visible
   //   await expect(page.getByText("Mon texte de test")).toBeVisible();
-  // });
+  });
 });

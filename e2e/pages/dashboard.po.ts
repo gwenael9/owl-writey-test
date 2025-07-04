@@ -14,4 +14,8 @@ export class DashboardPo extends BasePo {
   async shouldBeDisplayed(): Promise<void> {
     await expect(this.pageLocator).toBeVisible();
   }
+
+  async shouldSeeRoman(title: string): Promise<void> {
+    await expect(this.pageLocator.locator(`text=${title}`).last()).toBeVisible();
+  }
 }
