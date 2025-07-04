@@ -13,7 +13,7 @@ Modifiez les informations à l'intérieur selon vos besoins (email, mot de passe
 .\run-k6.ps1
 ```
 
-### Bash
+### Bash :
 
 ```bash
 chmod +x run-k6.sh
