@@ -7,8 +7,17 @@ Modifiez les informations à l'intérieur selon vos besoins (email, mot de passe
 
 ## Tests de performance avec K6
 
+### Powershell :
+
 ```powershell
 .\run-k6.ps1
+```
+
+### Bash :
+
+```bash
+chmod +x run-k6.sh
+./run-k6.sh
 ```
 
 ---
