@@ -14,8 +14,8 @@ export interface E2EUser {
 }
 
 export const userName = {
-  ALICE: "alice",
   TOTO: "toto",
+  TOTO2: "toto2",
 } as const;
 
 export class Auth {

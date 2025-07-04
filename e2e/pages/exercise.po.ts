@@ -46,12 +46,26 @@ export class ExercisePo extends BasePo {
       .filter({ has: this.page.locator("mat-icon", { hasText: "delete" }) });
   }
 
+  get linkButton(): Locator {
+    return this.page
+      .locator("a")
+      .filter({ has: this.page.locator("mat-icon", { hasText: "link" }) });
+  }
+
   get paragraphInput(): Locator {
     return this.page.getByRole("paragraph").filter({ hasText: /^$/ });
   }
 
   get submitTurnButton(): Locator {
     return this.page.getByRole("button", { name: "Soumettre" });
+  }
+
+  get copyButton(): Locator {
+    return this.page.getByRole("button", { name: "Copier" });
+  }
+
+  get closeModalButton(): Locator {
+    return this.page.getByRole("button", { name: "Fermer" });
   }
 
   async shouldBeDisplayed(): Promise<void> {
@@ -71,6 +85,7 @@ export class ExercisePo extends BasePo {
   }
 
   async deleteExercise(): Promise<void> {
+    await this.deleteButton.isVisible();
     await this.deleteButton.click();
     await this.shouldDisplayText("Supprimer l'exercice ?");
     await this.page.getByRole("button", { name: "Oui" }).click();
@@ -98,5 +113,35 @@ export class ExercisePo extends BasePo {
 
     await this.wait(2000);
     await this.shouldDisplayText(content);
+  }
+
+  async shareExercice(): Promise<string> {
+    await this.linkButton.isVisible();
+    await this.linkButton.click();
+
+    await this.shouldDisplayText("Inviter d'autres Plumes");
+
+    await this.copyButton.isVisible();
+    await this.copyButton.click();
+
+    await expect(
+      this.page.locator(".mat-mdc-text-field-wrapper")
+    ).toBeVisible();
+
+    const inputValue = await this.page
+      .locator(".mat-mdc-text-field-wrapper input")
+      .inputValue();
+
+    await this.closeModalButton.isVisible();
+    await this.closeModalButton.click();
+
+    // on retourne l'url partagée
+    return inputValue;
+  }
+
+  async getExerciceFromUrl(url: string, exercice: Exercise): Promise<void> {
+    await this.page.goto(url);
+    await expect(this.page.getByText(exercice.title).first()).toBeVisible();
+    await this.shouldDisplayText(exercice.history);
   }
 }

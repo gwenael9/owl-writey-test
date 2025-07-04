@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { BrowserContext, test } from "@playwright/test";
 import { LoginPo } from "../pages/auth.po";
 import { userName } from "../tools/Auth";
 import { DashboardPo } from "../pages/dashboard.po";
@@ -40,5 +40,36 @@ test.describe("Exercise", () => {
   test("add my turn", async () => {
     await exercisePo.createExercise(exercise);
     await exercisePo.takeTurn("mon nouveau commentaire", exercise.title);
+  });
+
+  test.describe("with 2 users", () => {
+    let loginPo2: LoginPo;
+    let exercisePo2: ExercisePo;
+
+    let context: BrowserContext;
+
+    test.beforeAll(async ({ browser }) => {
+      context = await browser.newContext();
+      const page2 = await context.newPage();
+
+      loginPo2 = new LoginPo(page2);
+      exercisePo2 = new ExercisePo(page2);
+    });
+
+    test.afterAll(async () => {
+      await context.close();
+    });
+
+    test("share my exercice", async () => {
+      await exercisePo.createExercise(exercise);
+      const urlExercice = await exercisePo.shareExercice();
+
+      await loginPo2.goTo("login");
+      await loginPo2.logAsUser(userName.TOTO2);
+
+      await exercisePo2.wait(2000);
+
+      await exercisePo2.getExerciceFromUrl(urlExercice, exercise);
+    });
   });
 });
