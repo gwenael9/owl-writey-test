@@ -1,4 +1,5 @@
 import { expect, Page } from "@playwright/test";
+import { baseUrl } from "../utils/url";
 
 export abstract class BasePo {
   protected readonly page: Page;
@@ -8,5 +9,9 @@ export abstract class BasePo {
   }
   async shouldDisplayText(text: string): Promise<void> {
     await expect(this.page.getByText(text)).toBeVisible();
+  }
+
+  async goTo(path: string): Promise<void> {
+    await this.page.goto(`${baseUrl}/${path}`);
   }
 }

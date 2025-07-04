@@ -18,12 +18,12 @@ abstract class AuthPagePo extends BasePo {
     });
   }
 
-  constructor(page: Page) {
-    super(page);
+  get passwordInput(): Locator {
+    return this.pageLocator.locator("input[name=password]");
   }
 
-  async goTo(path: string): Promise<void> {
-    await this.page.goto(`${baseUrl}/${path}`);
+  constructor(page: Page) {
+    super(page);
   }
 
   async shouldBeDisplayed(): Promise<void> {
@@ -59,14 +59,6 @@ export class LoginPo extends AuthPagePo {
 
   get loginInput(): Locator {
     return this.pageLocator.locator("input[name=login]");
-  }
-
-  get passwordInput(): Locator {
-    return this.pageLocator.locator("input[name=password]");
-  }
-
-  async goTo(): Promise<void> {
-    await super.goTo("login");
   }
 
   async shouldDisplayHeaderAndForm(): Promise<void> {
@@ -107,10 +99,6 @@ export class RegisterPo extends AuthPagePo {
 
   get emailInput(): Locator {
     return this.pageLocator.locator("input[name=email]");
-  }
-
-  get passwordInput(): Locator {
-    return this.pageLocator.locator("input[name=password]");
   }
 
   get confirmPasswordInput(): Locator {

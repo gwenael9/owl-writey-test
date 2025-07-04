@@ -10,7 +10,7 @@ test.describe("Login page", () => {
   test.beforeEach(async ({ page }) => {
     loginPo = new LoginPo(page);
     dashboardPo = new DashboardPo(page);
-    await loginPo.goTo();
+    await loginPo.goTo("login");
   });
 
   test("should be displayed", async () => {
