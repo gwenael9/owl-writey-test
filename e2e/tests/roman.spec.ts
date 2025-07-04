@@ -21,7 +21,7 @@ test.describe("Roman", () => {
     dashboardPo = new DashboardPo(page);
     romanPo = new RomanPo(page);
 
-    await loginPo.goTo();
+    await loginPo.goTo("login");
     await loginPo.logAsUser(userName.TOTO);
     await dashboardPo.shouldBeDisplayed();
   });
@@ -34,9 +34,17 @@ test.describe("Roman", () => {
     // On crée un roman
     await romanPo.createRoman(romanTitle, romanDescription);
     // On crée un premier chapitre et on le remplit
-    await romanPo.addChapter('Mon premier chapitre', 'La description de mon premier chapitre.', 1);
+    await romanPo.addChapter(
+      "Mon premier chapitre",
+      "La description de mon premier chapitre.",
+      1
+    );
     // On rajoute un deuxième chapitre et on le remplit également
-    await romanPo.addChapter('Mon deuxième chapitre', 'La description de mon deuxième chapitre.', 2);
+    await romanPo.addChapter(
+      "Mon deuxième chapitre",
+      "La description de mon deuxième chapitre.",
+      2
+    );
     // On retourne à la page de dashboard
     await romanPo.goTo("dashboard");
     // On vérifie que le roman est bien visible dans la liste des romans
@@ -48,5 +56,4 @@ test.describe("Roman", () => {
     await romanPo.goTo("dashboard");
     await romanPo.deleteRoman(romanTitle);
   });
-    
 });
