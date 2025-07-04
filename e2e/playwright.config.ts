@@ -7,7 +7,7 @@ import { defineBddConfig } from "playwright-bdd";
  */
 import dotenv from "dotenv";
 import path from "path";
-dotenv.config({ path: path.resolve(__dirname, ".env") });
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 const useBdd = process.env["PLAYWRIGHT_USE_BDD"] === "1";
 
 const specs = useBdd

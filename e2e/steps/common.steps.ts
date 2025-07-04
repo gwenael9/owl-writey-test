@@ -8,7 +8,7 @@ export const fixtures = pageFixtures;
 const { Given, When, Then } = createBdd(fixtures);
 
 Given("I am logged in", async function ({ loginPo, dashboardPo }: AllFixtures) {
-  await loginPo.goTo();
+  await loginPo.goTo("login");
   await loginPo.logAsUser(userName.TOTO);
   await dashboardPo.shouldBeDisplayed();
 });

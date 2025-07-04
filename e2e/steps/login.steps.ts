@@ -7,7 +7,7 @@ export const fixtures = pageFixtures;
 const { Given, When, Then } = createBdd(fixtures);
 
 Given("I am on the login page", async function ({ loginPo }: AllFixtures) {
-  await loginPo.goTo();
+  await loginPo.goTo("login");
 });
 
 When(
