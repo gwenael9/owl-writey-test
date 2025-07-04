@@ -1,5 +1,9 @@
 # owl-writey-test
 
+### Initialisation du projet
+
+Réalisez un `npm install` dans les dossiers `api` et `e2e`.
+
 ## Tests de performance avec K6
 
 ### Préparation
